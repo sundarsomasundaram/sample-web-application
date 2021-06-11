@@ -45,28 +45,28 @@ pipeline{
                 {
               steps{
                   script{
-		 sh 'cp -r ../devops-training@2/target .'
-                   sh 'docker build . -t deekshithsn/devops-training:$Docker_tag'
-		   withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
+		               sh 'cp -r ../devops-training@2/target .'
+                   sh 'docker build . -t sundardockerdevops/devops-training:$Docker_tag'
+		                            withCredentials([string(credentialsId: 'docker_pwd', variable: 'docker_pwd')]) {
 				    
-				  sh 'docker login -u deekshithsn -p $docker_password'
-				  sh 'docker push deekshithsn/devops-training:$Docker_tag'
+                  sh 'docker login -u sundardockerdevops -p $docker_pwd'
+                  sh 'docker push sundardockerdevops/devops-training:$Docker_tag'
 			}
                        }
                     }
                  }
 		 
-		stage('ansible playbook'){
-			steps{
-			 	script{
-				    sh '''final_tag=$(echo $Docker_tag | tr -d ' ')
-				     echo ${final_tag}test
-				     sed -i "s/docker_tag/$final_tag/g"  deployment.yaml
-				     '''
-				    ansiblePlaybook become: true, installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yaml'
-				}
-			}
-		}
+		// stage('ansible playbook'){
+		// 	steps{
+		// 	 	script{
+		// 		    sh '''final_tag=$(echo $Docker_tag | tr -d ' ')
+		// 		     echo ${final_tag}test
+		// 		     sed -i "s/docker_tag/$final_tag/g"  deployment.yaml
+		// 		     '''
+		// 		    ansiblePlaybook become: true, installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yaml'
+		// 		}
+		// 	}
+		// }
 		
 	
 		
